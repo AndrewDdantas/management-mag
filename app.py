@@ -38,16 +38,10 @@ db['valor_total'] = db['valor_total'].str.replace(',', '.').astype(float)
 db['QT_ESTOQUE'] = db['QT_ESTOQUE'].str.replace(',', '.').astype(float)
 
 col1, col2, col3 = st.columns(3)
-total = fmt_num(db['valor_total'].sum(),'REAL')
-col1.subheader(f'Custo Total: {total}')
 
-pecas = fmt_num(db['QT_ESTOQUE'].sum(),'NORMAL')
-col2.subheader(f'Peças: {pecas}')
-
-sku = fmt_num(db['IT_AJUSTADO'].nunique(),'NORMAL')
-col3.subheader(f"Sku's: {sku}")
-
-
+col1_emp = col1.empty()
+col2_emp = col2.empty()
+col3_emp = col3.empty()
 
 # Fetch the 'LOG' worksheet and convert it to a DataFrame
 log_worksheet = sheet.worksheet('LOG')
@@ -55,6 +49,26 @@ log_data = log_worksheet.get_all_values()
 log = pd.DataFrame(log_data[1:], columns=log_data[0])  # Set the first row as column headers
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
+
+emp = st.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
+
+if emp != 'Todos':
+    log = log.loc[log['CD_EMPRESA'] == emp]
+    db = db.loc[db['CD_EMPRESA'] == emp]
+else:
+    log = log
+    db = db
+
+total = fmt_num(db['valor_total'].sum(),'REAL')
+col1_emp.subheader(f'Custo Total: {total}')
+
+pecas = fmt_num(db['QT_ESTOQUE'].sum(),'NORMAL')
+col2_emp.subheader(f'Peças: {pecas}')
+
+sku = fmt_num(db['IT_AJUSTADO'].nunique(),'NORMAL')
+col3_emp.subheader(f"Sku's: {sku}")
+
+
 
 AGING = log.groupby(['DATA','AGING']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).sort_values('VALOR', ascending=False).reset_index()
 AGING_AJUS = AGING
@@ -74,8 +88,8 @@ EMPRESA_AJUS['PRODUTOS'] = EMPRESA_AJUS['PRODUTOS'].apply(fmt_num, tipo='NORMAL'
 st.divider()
 col1, col2, col3 = st.columns(3)
 col1.subheader('Empresas')
-col1.dataframe(EMPRESA_AJUS)
+col1.dataframe(EMPRESA_AJUS, hide_index=True)
 col2.subheader('Aging')
-col2.dataframe(AGING_AJUS)
+col2.dataframe(AGING_AJUS, hide_index=True)
 col3.subheader('Areas')
-col3.dataframe(AREA_AJUS)
+col3.dataframe(AREA_AJUS, hide_index=True)
