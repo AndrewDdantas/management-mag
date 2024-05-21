@@ -59,7 +59,7 @@ AREA_2 = AREA
 AREA_2['PRODUTOS'] = AREA_2['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
 AREA_2['VALOR'] = AREA_2['VALOR'].apply(fmt_num, tipo='REAL')
 
-st.dataframe(AREA_2)
+st.dataframe(AGING)
 
 chart_valor = alt.Chart(AGING).mark_bar().encode(
     x=alt.X('DATA:N', title='Data'),
