@@ -50,16 +50,14 @@ log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
 AGING = log.groupby(['DATA','AGING']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
-AGING_2 = AGING
-AGING_2['PRODUTOS'] = AGING_2['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
-AGING_2['VALOR'] = AGING_2['VALOR'].apply(fmt_num, tipo='REAL')
+AGING['PRODUTOS'] = AGING['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
+AGING['VALOR'] = AGING['VALOR'].apply(fmt_num, tipo='REAL')
 
 AREA = log.groupby(['DATA','CD_AREA_ARMAZ']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
-AREA_2 = AREA
-AREA_2['PRODUTOS'] = AREA_2['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
-AREA_2['VALOR'] = AREA_2['VALOR'].apply(fmt_num, tipo='REAL')
+AREA['PRODUTOS'] = AREA['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
+AREA['VALOR'] = AREA['VALOR'].apply(fmt_num, tipo='REAL')
 
-st.dataframe(AGING_2)
+st.dataframe(AGING)
 
 chart_valor = alt.Chart(AGING).mark_bar().encode(
     x=alt.X('DATA:N', title='Data'),
@@ -90,7 +88,7 @@ combined_chart = alt.hconcat(chart_valor, chart_produtos)
 st.altair_chart(combined_chart)
 
 
-st.dataframe(AREA_2)
+st.dataframe(AREA)
 
 chart_valor = alt.Chart(AREA).mark_bar().encode(
     x=alt.X('DATA:N', title='Data'),
