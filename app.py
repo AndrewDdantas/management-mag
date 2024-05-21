@@ -50,8 +50,12 @@ log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
 AGING = log.groupby(['DATA','AGING']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
+AGING['PRODUTOS'] = AGING['PRODUTOS'].apply(fmt_num, valor='NORMAL')
+AGING['VALOR'] = AGING['VALOR'].apply(fmt_num, valor='REAL')
 
 AREA = log.groupby(['DATA','CD_AREA_ARMAZ']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
+AREA['PRODUTOS'] = AREA['PRODUTOS'].apply(fmt_num, valor='NORMAL')
+AREA['VALOR'] = AREA['VALOR'].apply(fmt_num, valor='REAL')
 
 st.dataframe(AGING)
 
