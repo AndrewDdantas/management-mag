@@ -59,7 +59,7 @@ AREA_2 = AREA
 AREA_2['PRODUTOS'] = AREA_2['PRODUTOS'].apply(fmt_num, tipo='NORMAL')
 AREA_2['VALOR'] = AREA_2['VALOR'].apply(fmt_num, tipo='REAL')
 
-st.dataframe(AGING)
+st.dataframe(AGING_2)
 
 chart_valor = alt.Chart(AGING).mark_bar().encode(
     x=alt.X('DATA:N', title='Data'),
@@ -90,7 +90,7 @@ combined_chart = alt.hconcat(chart_valor, chart_produtos)
 st.altair_chart(combined_chart)
 
 
-st.dataframe(AREA)
+st.dataframe(AREA_2)
 
 chart_valor = alt.Chart(AREA).mark_bar().encode(
     x=alt.X('DATA:N', title='Data'),
