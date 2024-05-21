@@ -2,7 +2,13 @@ import streamlit as st
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread as gs
 import pandas as pd
-import altair as alt
+
+st.set_page_config(
+    page_title="GERENCIAMENTO",
+    page_icon=":chart_with_upwards_trend:",
+    layout="wide", 
+    initial_sidebar_state="auto",
+)
 
 def fmt_num(valor, tipo, casas=0): # Função para formatar números.
     if isinstance(valor,str):
@@ -31,14 +37,15 @@ db = pd.DataFrame(db_data[1:], columns=db_data[0])  # Set the first row as colum
 db['valor_total'] = db['valor_total'].str.replace(',', '.').astype(float)
 db['QT_ESTOQUE'] = db['QT_ESTOQUE'].str.replace(',', '.').astype(float)
 
-st.write('Total_$')
-st.write(fmt_num(db['valor_total'].sum(),'REAL'))
+col1, col2, col3 = st.columns(3)
+total = fmt_num(db['valor_total'].sum(),'REAL')
+col1.subheader(f'Custo Total: {total}')
 
-st.write('Peças')
-st.write(fmt_num(db['QT_ESTOQUE'].sum(),'NORMAL'))
+pecas = fmt_num(db['QT_ESTOQUE'].sum(),'NORMAL')
+col2.subheader(f'Peças: {pecas}')
 
-st.write("Sku's")
-st.write(fmt_num(db['IT_AJUSTADO'].nunique(),'NORMAL'))
+sku = fmt_num(db['IT_AJUSTADO'].nunique(),'NORMAL')
+col3.subheader(f"Sku's: {sku}")
 
 
 
@@ -49,67 +56,26 @@ log = pd.DataFrame(log_data[1:], columns=log_data[0])  # Set the first row as co
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
-AGING = log.groupby(['DATA','AGING']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
+AGING = log.groupby(['DATA','AGING']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).sort_values('VALOR', ascending=False).reset_index()
+AGING_AJUS = AGING
+AGING_AJUS['VALOR'] = AGING_AJUS['VALOR'].apply(fmt_num, tipo='REAL') 
+AGING_AJUS['PRODUTOS'] = AGING_AJUS['PRODUTOS'].apply(fmt_num, tipo='NORMAL') 
 
-AREA = log.groupby(['DATA','CD_AREA_ARMAZ']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).reset_index()
+AREA = log.groupby(['DATA','CD_AREA_ARMAZ']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).sort_values('VALOR', ascending=False).reset_index()
+AREA_AJUS = AREA
+AREA_AJUS['VALOR'] = AREA_AJUS['VALOR'].apply(fmt_num, tipo='REAL') 
+AREA_AJUS['PRODUTOS'] = AREA_AJUS['PRODUTOS'].apply(fmt_num, tipo='NORMAL') 
 
-st.dataframe(AGING)
+EMPRESA = log.groupby(['DATA','CD_EMPRESA']).agg({'PRODUTOS':'sum', 'VALOR':'sum'}).sort_values('VALOR', ascending=False).reset_index()
+EMPRESA_AJUS = EMPRESA
+EMPRESA_AJUS['VALOR'] = EMPRESA_AJUS['VALOR'].apply(fmt_num, tipo='REAL') 
+EMPRESA_AJUS['PRODUTOS'] = EMPRESA_AJUS['PRODUTOS'].apply(fmt_num, tipo='NORMAL') 
 
-chart_valor = alt.Chart(AGING).mark_bar().encode(
-    x=alt.X('DATA:N', title='Data'),
-    y=alt.Y('VALOR:Q', title='Valor'),
-    color='AGING:N',
-    tooltip=['DATA','AGING', 'VALOR']
-).properties(
-    width=400,
-    height=400,
-    title='Valor by Aging'
-)
-
-chart_produtos = alt.Chart(AGING).mark_bar().encode(
-    x=alt.X('DATA:N', title='Data'),
-    y=alt.Y('PRODUTOS:Q', title='Produtos'),
-    color='AGING:N',
-    tooltip=['DATA','AGING', 'PRODUTOS']
-).properties(
-    width=400,
-    height=400,
-    title='Produtos by Aging'
-)
-
-# Combine the charts
-combined_chart = alt.hconcat(chart_valor, chart_produtos)
-
-# Display the combined chart in Streamlit
-st.altair_chart(combined_chart)
-
-
-st.dataframe(AREA)
-
-chart_valor = alt.Chart(AREA).mark_bar().encode(
-    x=alt.X('DATA:N', title='Data'),
-    y=alt.Y('VALOR:Q', title='Valor'),
-    color='CD_AREA_ARMAZ:N',
-    tooltip=['DATA','CD_AREA_ARMAZ', 'VALOR']
-).properties(
-    width=400,
-    height=400,
-    title='Valor by Aging'
-)
-
-chart_produtos = alt.Chart(AREA).mark_bar().encode(
-    x=alt.X('DATA:N', title='Data'),
-    y=alt.Y('PRODUTOS:Q', title='Produtos'),
-    color='CD_AREA_ARMAZ:N',
-    tooltip=['DATA','CD_AREA_ARMAZ', 'PRODUTOS']
-).properties(
-    width=400,
-    height=400,
-    title='Produtos by Aging'
-)
-
-# Combine the charts
-combined_chart = alt.hconcat(chart_valor, chart_produtos)
-
-# Display the combined chart in Streamlit
-st.altair_chart(combined_chart)
+st.divider()
+col1, col2, col3 = st.columns(3)
+col1.subheader('Empresas')
+col1.dataframe(EMPRESA_AJUS)
+col2.subheader('Aging')
+col2.dataframe(AGING_AJUS)
+col3.subheader('Areas')
+col3.dataframe(AREA_AJUS)
