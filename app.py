@@ -208,19 +208,6 @@ chart_tipo_text = chart_tipo.mark_text(
 )
 
 
-""" chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
-    theta=alt.Theta(field="VALOR", type="quantitative"),
-    color=alt.Color(field="TIPO_ENDEREÇO", type="nominal", legend=alt.Legend(
-        title="Tipos de Endereços",
-        titleFontSize=14,
-        labelFontSize=12,
-        orient='right',
-        direction='vertical'
-    ))
-).properties(
-    title="Tipos de Endereços"
-) """
-
 chart_tipo = chart_tipo+chart_tipo_text
 
 col2.subheader('Tipos de Endereços')
