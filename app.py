@@ -75,7 +75,7 @@ log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 c1,c2,c3 = st.columns(3)
 emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
 
-agings = c2.selectbox('Aging' ,['Todos'] + db['AGING'].drop_duplicates().values.tolist() )
+agings = c2.selectbox('Aging' ,['Todos'] + db['aging'].drop_duplicates().values.tolist() )
 
 areas = c3.selectbox('Área' ,['Todos'] + db['CD_AREA_ARMAZ'].drop_duplicates().values.tolist() )
 
@@ -87,15 +87,15 @@ else:
     db = db
 
 if agings != 'Todos':
-    log = log.loc[log['CD_EMPRESA'] == agings]
-    db = db.loc[db['CD_EMPRESA'] == agings]
+    log = log.loc[log['AGING'] == agings]
+    db = db.loc[db['aging'] == agings]
 else:
     log = log
     db = db
 
 if areas != 'Todos':
-    log = log.loc[log['CD_EMPRESA'] == areas]
-    db = db.loc[db['CD_EMPRESA'] == areas]
+    log = log.loc[log['CD_AREA_ARMAZ'] == areas]
+    db = db.loc[db['CD_AREA_ARMAZ'] == areas]
 else:
     log = log
     db = db
@@ -184,4 +184,5 @@ if button:
             file_name='dados.csv',
             mime='text/csv'
         )
+
 
