@@ -189,17 +189,22 @@ chart = alt.Chart(aging).mark_arc(innerRadius=50).encode(
 
 chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
     x='VALOR:Q',
-    y="TIPO_ENDEREÇO:N"
+    y=alt.Y('TIPO_ENDEREÇO:N', sort='-x')  # Ordena do maior para o menor valor
 ).properties(
     title="Tipos de Endereços"
 )
 
 chart_tipo_text = chart_tipo.mark_text(
-    align='left',
-    baseline='middle',
-    dx=3  # Deslocamento do texto em relação à barra
+    align='center',  # Centraliza o texto horizontalmente
+    baseline='middle',  # Centraliza o texto verticalmente
+    dx=0  # Sem deslocamento horizontal
 ).encode(
-    text='VALOR:Q'
+    text='VALOR:Q',
+    color=alt.condition(
+        alt.datum.VALOR > 75,  # Condição para alterar a cor do texto
+        alt.value('white'),  # Texto branco para valores maiores que 75
+        alt.value('black')   # Texto preto para valores menores ou iguais a 75
+    )
 )
 
 
