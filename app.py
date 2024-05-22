@@ -128,7 +128,6 @@ recent_dates = sorted(pivot_table_aging.columns, key=lambda x: pd.to_datetime(x,
 pivot_table_aging = pivot_table_aging[recent_dates]
 if len(recent_dates) >= 2:
     pivot_table_aging['Diferença'] = pivot_table_aging[recent_dates[-1]] - pivot_table_aging[recent_dates[-2]]
-aging = aging.loc[aging['DATA'] == recent_dates[-1]]
 pivot_table_aging = pivot_table_aging.sort_values(recent_dates[-1], ascending=False)
 pivot_table_aging = pivot_table_aging.applymap(fmt_num, tipo='NORMAL')
 styled_pivot_table_aging = pivot_table_aging.style.applymap(color_negative_red_positive_green, subset=['Diferença'])
@@ -148,8 +147,11 @@ col1.subheader('Evolução Áreas')
 col1.dataframe(styled_pivot_table_area)
 
 tipo_endereco = log.groupby(['DATA','TIPO_ENDEREÇO']).agg({'VALOR':'sum'}).reset_index()
+tipo_endereco = tipo_endereco.loc[tipo_endereco['DATA'] == recent_dates[-1]]
 
 aging = log.groupby(['DATA','AGING']).agg({'VALOR':'sum'}).reset_index()
+aging = aging.loc[aging['DATA'] == recent_dates[-1]]
+
 val = aging['VALOR'].sum()
 aging['%'] = aging['VALOR'] / val
 aging['AGING'] = aging['AGING'] +" - "+ aging['VALOR'].apply(lambda x: fmt_num(x / val, tipo='PORCENTAGEM'))
