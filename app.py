@@ -186,7 +186,7 @@ chart = alt.Chart(aging).mark_arc(innerRadius=50).encode(
     title="Distribuição de Valores por Aging"
 )
 
-chart_tipo = alt.Chart(tipo_endereco)..mark_bar().encode(
+chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
     x='VALOR:Q',
     y="TIPO_ENDEREÇO:N",
     text='VALOR'
