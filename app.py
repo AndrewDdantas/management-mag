@@ -194,21 +194,20 @@ chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
     title="Tipos de Endereços"
 )
 
-chart_tipo_text = chart_tipo.mark_text(
-    align='right',  # Centraliza o texto horizontalmente
-    baseline='middle',  # Centraliza o texto verticalmente
-    dx=0  # Sem deslocamento horizontal
-).encode(
-    text=alt.Text('VALOR:Q', format=',.0f'),
-    color=alt.condition(
-        alt.datum.VALOR > 75,  # Condição para alterar a cor do texto
-        alt.value('white'),  # Texto branco para valores maiores que 75
-        alt.value('black')   # Texto preto para valores menores ou iguais a 75
-    )
-)
+data = tipo_endereco.assign(VALOR_FORMATADO = tipo_endereco['VALOR'].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")))
 
-chart_tipo_text = chart_tipo_text.transform_calculate(
-    VALOR_FORMATADO='replace(replace(format(datum.VALOR, ",.2f"), ",", "X"), ".", ",").replace("X", ".")'
+
+chart_tipo_text = chart_tipo.mark_text(
+    align='right',  # Alinha o texto à direita
+    baseline='middle',  # Centraliza o texto verticalmente
+    dx=-3  # Desloca o texto levemente para a esquerda para que fique dentro da barra
+).encode(
+    text=alt.Text('VALOR_FORMATADO:N'),  # Usar a coluna formatada
+    color=alt.condition(
+        alt.datum.VALOR > 75000,  # Condição para alterar a cor do texto
+        alt.value('white'),  # Texto branco para valores maiores que 75.000
+        alt.value('black')   # Texto preto para valores menores ou iguais a 75.000
+    )
 )
 
 
