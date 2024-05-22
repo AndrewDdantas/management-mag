@@ -94,7 +94,7 @@ else:
     db = db
 
 if areas != 'Todos':
-    log = log.loc[log['DS_AREA_ARMAZ'] == areas]
+    log = log.loc[log['CD_AREA_ARMAZ'] == areas]
     db = db.loc[db['DS_AREA_ARMAZ_y'] == areas]
 else:
     log = log
