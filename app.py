@@ -70,12 +70,14 @@ log = pd.DataFrame(log_data[1:], columns=log_data[0])
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
-c1,c2,c3 = st.columns(3)
+c1,c2,c3,c4 = st.columns(3)
 emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
 
 agings = c2.selectbox('Aging' ,['Todos'] + db['aging'].drop_duplicates().values.tolist() )
 
 areas = c3.selectbox('Área' ,['Todos'] + db['DS_AREA_ARMAZ_y'].drop_duplicates().values.tolist() )
+
+tipos = c3.selectbox('Tipo Endereço' ,['Todos'] + db['TIPO_ENDEREÇO'].drop_duplicates().values.tolist() )
 
 if emp != 'Todos':
     log = log.loc[log['CD_EMPRESA'] == emp]
@@ -94,6 +96,13 @@ else:
 if areas != 'Todos':
     log = log.loc[log['CD_AREA_ARMAZ'] == areas]
     db = db.loc[db['DS_AREA_ARMAZ_y'] == areas]
+else:
+    log = log
+    db = db
+
+if tipos != 'Todos':
+    log = log.loc[log['TIPO_ENDEREÇO'] == tipos]
+    db = db.loc[db['TIPO_ENDEREÇO'] == tipos]
 else:
     log = log
     db = db
