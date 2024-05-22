@@ -77,7 +77,7 @@ emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().val
 
 agings = c2.selectbox('Aging' ,['Todos'] + db['aging'].drop_duplicates().values.tolist() )
 
-areas = c3.selectbox('Área' ,['Todos'] + db['CD_AREA_ARMAZ'].drop_duplicates().values.tolist() )
+areas = c3.selectbox('Área' ,['Todos'] + db['DS_AREA_ARMAZ_y'].drop_duplicates().values.tolist() )
 
 if emp != 'Todos':
     log = log.loc[log['CD_EMPRESA'] == emp]
@@ -94,8 +94,8 @@ else:
     db = db
 
 if areas != 'Todos':
-    log = log.loc[log['CD_AREA_ARMAZ'] == areas]
-    db = db.loc[db['CD_AREA_ARMAZ'] == areas]
+    log = log.loc[log['DS_AREA_ARMAZ_y'] == areas]
+    db = db.loc[db['DS_AREA_ARMAZ_y'] == areas]
 else:
     log = log
     db = db
@@ -184,5 +184,6 @@ if button:
             file_name='dados.csv',
             mime='text/csv'
         )
+
 
 
