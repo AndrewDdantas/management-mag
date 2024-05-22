@@ -66,19 +66,36 @@ col3_emp = col3.empty()
 
 st.divider()
 
-
-
 log_worksheet = sheet.worksheet('LOG')
 log_data = log_worksheet.get_all_values()
 log = pd.DataFrame(log_data[1:], columns=log_data[0]) 
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
-emp = st.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
+c1,c2,c3 = st.columns(3)
+emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
+
+agings = c2.selectbox('Aging' ,['Todos'] + db['AGING'].drop_duplicates().values.tolist() )
+
+areas = c3.selectbox('Área' ,['Todos'] + db['CD_AREA_ARMAZ'].drop_duplicates().values.tolist() )
 
 if emp != 'Todos':
     log = log.loc[log['CD_EMPRESA'] == emp]
     db = db.loc[db['CD_EMPRESA'] == emp]
+else:
+    log = log
+    db = db
+
+if agings != 'Todos':
+    log = log.loc[log['CD_EMPRESA'] == agings]
+    db = db.loc[db['CD_EMPRESA'] == agings]
+else:
+    log = log
+    db = db
+
+if areas != 'Todos':
+    log = log.loc[log['CD_EMPRESA'] == areas]
+    db = db.loc[db['CD_EMPRESA'] == areas]
 else:
     log = log
     db = db
@@ -167,3 +184,4 @@ if button:
             file_name='dados.csv',
             mime='text/csv'
         )
+
