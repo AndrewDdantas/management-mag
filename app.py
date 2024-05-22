@@ -21,7 +21,7 @@ def color_negative_red_positive_green(val):
     return f'color: {color}'
 
 
-def fmt_num(valor, tipo, casas=0): # Função para formatar números.
+def fmt_num(valor, tipo, casas=0):
     if isinstance(valor,str):
         return ''
     if tipo == 'REAL':
@@ -42,15 +42,13 @@ st.set_page_config(
 )
 
 
-# Define the scope and authenticate
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('./credentials.json', scope)
 client = gs.authorize(credentials)
 
-# Open the Google Sheets document
+
 sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1SlnFPqnbVkwEh3Gt56lNxIadE2tfUfQy-KsFn4Xx5l4/edit#gid=1350786165')
 
-# Fetch the 'DB' worksheet and convert it to a DataFrame
 db_worksheet = sheet.worksheet('DB')
 db_data = db_worksheet.get_all_values()
 db = pd.DataFrame(db_data[1:], columns=db_data[0])
