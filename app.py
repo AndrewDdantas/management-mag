@@ -126,7 +126,7 @@ sku = fmt_num(db['IT_AJUSTADO'].nunique(),'NORMAL')
 col3_emp.subheader(f"Sku's: {sku}")
 
 
-pivot_table_empresa = pd.pivot_table(log,'VALOR','CD_EMPRESA','DATA','sum')
+pivot_table_empresa = pd.pivot_table(log,'VALOR','CD_EMPRESA','DATA','sum').fillna(0)
 recent_dates = sorted(pivot_table_empresa.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)[:5]
 pivot_table_empresa = pivot_table_empresa[recent_dates]
 if len(recent_dates) >= 2:
@@ -139,7 +139,7 @@ col1.dataframe(styled_pivot_table_empresa)
 
 
 
-pivot_table_aging = pd.pivot_table(log,'VALOR','AGING','DATA','sum')
+pivot_table_aging = pd.pivot_table(log,'VALOR','AGING','DATA','sum').fillna(0)
 recent_dates = sorted(pivot_table_aging.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)[:5]
 pivot_table_aging = pivot_table_aging[recent_dates]
 if len(recent_dates) >= 2:
@@ -151,7 +151,7 @@ col1.subheader('Evolução Aging')
 col1.dataframe(styled_pivot_table_aging)
 
 
-pivot_table_area = pd.pivot_table(log,'VALOR','CD_AREA_ARMAZ','DATA','sum')
+pivot_table_area = pd.pivot_table(log,'VALOR','CD_AREA_ARMAZ','DATA','sum').fillna(0)
 recent_dates = sorted(pivot_table_area.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)[:5]
 pivot_table_area = pivot_table_area[recent_dates]
 if len(recent_dates) >= 2:
