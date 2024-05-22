@@ -55,7 +55,7 @@ db = pd.DataFrame(db_data[1:], columns=db_data[0])
 db['valor_total'] = db['valor_total'].str.replace(',', '.').astype(float)
 db['QT_ESTOQUE'] = db['QT_ESTOQUE'].str.replace(',', '.').astype(float)
 
-col1, col2, col3 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 
 col1_emp = col1.empty()
@@ -70,7 +70,7 @@ log = pd.DataFrame(log_data[1:], columns=log_data[0])
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
-c1,c2,c3,c4 = st.columns(3)
+c1,c2,c3,c4 = st.columns(4)
 emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
 
 agings = c2.selectbox('Aging' ,['Todos'] + db['aging'].drop_duplicates().values.tolist() )
