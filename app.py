@@ -121,7 +121,7 @@ styled_pivot_table_empresa = pivot_table_empresa.style.applymap(color_negative_r
 col1.subheader('Evolução Cds')
 col1.dataframe(styled_pivot_table_empresa)
 
-aging = log.groupby(['DATA','AGING']).agg({'VALOR':'sum'}).reset_index()
+
 
 pivot_table_aging = pd.pivot_table(log,'VALOR','AGING','DATA','sum')
 recent_dates = sorted(pivot_table_aging.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)[:5]
@@ -147,6 +147,9 @@ styled_pivot_table_area = pivot_table_area.style.applymap(color_negative_red_pos
 col1.subheader('Evolução Áreas')
 col1.dataframe(styled_pivot_table_area)
 
+tipo_endereco = log.groupby(['DATA','TIPO_ENDEREÇO']).agg({'VALOR':'sum'}).reset_index()
+
+aging = log.groupby(['DATA','AGING']).agg({'VALOR':'sum'}).reset_index()
 val = aging['VALOR'].sum()
 aging['%'] = aging['VALOR'] / val
 aging['AGING'] = aging['AGING'] +" - "+ aging['VALOR'].apply(lambda x: fmt_num(x / val, tipo='PORCENTAGEM'))
@@ -164,6 +167,22 @@ chart = alt.Chart(aging).mark_arc(innerRadius=50).encode(
 ).properties(
     title="Distribuição de Valores por Aging"
 )
+
+chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
+    theta=alt.Theta(field="VALOR", type="quantitative"),
+    color=alt.Color(field="TIPO_ENDEREÇO", type="nominal", legend=alt.Legend(
+        title="Tipos de Endereços",
+        titleFontSize=14,
+        labelFontSize=12,
+        orient='right',
+        direction='vertical'
+    ))
+).properties(
+    title="Tipos de Endereços"
+)
+
+col2.subheader('Tipos de Endereços')
+col2.altair_chart(chart_tipo)
 
 
 final_chart = chart 
