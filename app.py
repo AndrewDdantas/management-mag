@@ -194,8 +194,7 @@ chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
     title="Tipos de Endereços"
 )
 
-data = tipo_endereco.assign(VALOR_FORMATADO = tipo_endereco['VALOR'].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")))
-
+tipo_endereco['VALOR_FORMATADO'] = tipo_endereco['VALOR'].apply(fmt_num, tipo='NORMAL')
 
 chart_tipo_text = chart_tipo.mark_text(
     align='right',  # Alinha o texto à direita
