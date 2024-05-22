@@ -186,6 +186,7 @@ chart = alt.Chart(aging).mark_arc(innerRadius=50).encode(
     title="Distribuição de Valores por Aging"
 )
 
+
 chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
     x='VALOR:Q',
     y="TIPO_ENDEREÇO:N"
@@ -196,19 +197,11 @@ chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
 chart_tipo_text = chart_tipo.mark_text(
     align='left',
     baseline='middle',
-    dx=3  # deslocamento horizontal
+    dx=3  # Deslocamento do texto em relação à barra
 ).encode(
     text='VALOR:Q'
 )
 
-# Combina os dois gráficos em camadas
-chart_tipo_text_final = alt.layer(
-    chart_tipo,
-    chart_tipo_text
-).resolve_scale(
-    x='independent',
-    y='independent'
-)
 
 """ chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
     theta=alt.Theta(field="VALOR", type="quantitative"),
@@ -223,8 +216,10 @@ chart_tipo_text_final = alt.layer(
     title="Tipos de Endereços"
 ) """
 
+chart_tipo = chart_tipo+chart_tipo_text
+
 col2.subheader('Tipos de Endereços')
-col2.altair_chart(chart_tipo_text_final)
+col2.altair_chart(chart_tipo)
 
 
 final_chart = chart 
