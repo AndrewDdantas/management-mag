@@ -55,7 +55,7 @@ db = pd.DataFrame(db_data[1:], columns=db_data[0])
 db['valor_total'] = db['valor_total'].str.replace(',', '.').astype(float)
 db['QT_ESTOQUE'] = db['QT_ESTOQUE'].str.replace(',', '.').astype(float)
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(4)
 
 
 col1_emp = col1.empty()
