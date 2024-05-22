@@ -195,7 +195,7 @@ chart_tipo = alt.Chart(tipo_endereco).mark_bar().encode(
 )
 
 chart_tipo_text = chart_tipo.mark_text(
-    align='center',  # Centraliza o texto horizontalmente
+    align='left',  # Centraliza o texto horizontalmente
     baseline='middle',  # Centraliza o texto verticalmente
     dx=0  # Sem deslocamento horizontal
 ).encode(
