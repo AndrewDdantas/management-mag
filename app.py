@@ -199,7 +199,7 @@ chart_tipo_text = chart_tipo.mark_text(
     baseline='middle',  # Centraliza o texto verticalmente
     dx=0  # Sem deslocamento horizontal
 ).encode(
-    text=alt.Text('VALOR:Q', format=(fmt_num, 'NORMAL')),
+    text=alt.Text('VALOR:Q', format=',.0f'),
     color=alt.condition(
         alt.datum.VALOR > 75,  # Condição para alterar a cor do texto
         alt.value('white'),  # Texto branco para valores maiores que 75
@@ -207,19 +207,10 @@ chart_tipo_text = chart_tipo.mark_text(
     )
 )
 
+chart_tipo_text = chart_tipo_text.transform_calculate(
+    VALOR_FORMATADO='replace(replace(format(datum.VALOR, ",.2f"), ",", "X"), ".", ",").replace("X", ".")'
+)
 
-""" chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
-    theta=alt.Theta(field="VALOR", type="quantitative"),
-    color=alt.Color(field="TIPO_ENDEREÇO", type="nominal", legend=alt.Legend(
-        title="Tipos de Endereços",
-        titleFontSize=14,
-        labelFontSize=12,
-        orient='right',
-        direction='vertical'
-    ))
-).properties(
-    title="Tipos de Endereços"
-) """
 
 chart_tipo = chart_tipo+chart_tipo_text
 
