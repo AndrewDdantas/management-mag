@@ -4,6 +4,9 @@ import gspread as gs
 import pandas as pd
 from io import StringIO
 import altair as alt
+from datetime import datetime, timedelta
+
+
 
 def to_csv(df):
     output = StringIO()
@@ -41,6 +44,10 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
+update = (datetime.now() - timedelta(hours=3)).strftime('%d/%m/%Y')
+
+st.title('Gestão Bloqueios CDs')
+st.write(f'Update: '+update)
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('./credentials.json', scope)
@@ -70,14 +77,14 @@ log = pd.DataFrame(log_data[1:], columns=log_data[0])
 log['VALOR'] = log['VALOR'].str.replace(',', '.').astype(float)
 log['PRODUTOS'] = log['PRODUTOS'].str.replace(',', '.').astype(float)
 
-c1,c2,c3,c4 = st.columns(4)
+c1,c2 = st.columns(2)
 emp = c1.selectbox('Empresa' ,['Todos'] + db['CD_EMPRESA'].drop_duplicates().values.tolist() )
 
 agings = c2.selectbox('Aging' ,['Todos'] + db['aging'].drop_duplicates().values.tolist() )
 
-areas = c3.selectbox('Área' ,['Todos'] + db['DS_AREA_ARMAZ_y'].drop_duplicates().values.tolist() )
+areas = c1.selectbox('Área' ,['Todos'] + db['DS_AREA_ARMAZ_y'].drop_duplicates().values.tolist() )
 
-tipos = c3.selectbox('Tipo Endereço' ,['Todos'] + db['TIPO_ENDEREÇO'].drop_duplicates().values.tolist() )
+tipos = c2.selectbox('Tipo Endereço' ,['Todos'] + db['TIPO_ENDEREÇO'].drop_duplicates().values.tolist() )
 
 if emp != 'Todos':
     log = log.loc[log['CD_EMPRESA'] == emp]
