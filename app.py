@@ -199,7 +199,7 @@ chart_tipo_text = chart_tipo.mark_text(
     baseline='middle',  # Centraliza o texto verticalmente
     dx=0  # Sem deslocamento horizontal
 ).encode(
-    text='VALOR:Q',
+    text=alt.Text('VALOR:Q', format=',.0f'),
     color=alt.condition(
         alt.datum.VALOR > 75,  # Condição para alterar a cor do texto
         alt.value('white'),  # Texto branco para valores maiores que 75
