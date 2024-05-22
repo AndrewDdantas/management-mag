@@ -186,7 +186,19 @@ chart = alt.Chart(aging).mark_arc(innerRadius=50).encode(
     title="Distribuição de Valores por Aging"
 )
 
-chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
+chart_tipo = alt.Chart(tipo_endereco)..mark_bar().encode(
+    x='VALOR:Q',
+    y="TIPO_ENDEREÇO:N",
+    text='VALOR'
+).properties(
+    title="Tipos de Endereços"
+)
+
+
+
+chart_tipo.mark_bar() + chart_tipo.mark_text(align='left', dx=2)
+
+""" chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
     theta=alt.Theta(field="VALOR", type="quantitative"),
     color=alt.Color(field="TIPO_ENDEREÇO", type="nominal", legend=alt.Legend(
         title="Tipos de Endereços",
@@ -197,7 +209,7 @@ chart_tipo = alt.Chart(tipo_endereco).mark_arc(innerRadius=50).encode(
     ))
 ).properties(
     title="Tipos de Endereços"
-)
+) """
 
 col2.subheader('Tipos de Endereços')
 col2.altair_chart(chart_tipo)
