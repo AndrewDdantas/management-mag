@@ -67,6 +67,7 @@ scope = ['https://spreadsheets.google.com/feeds',
         'https://www.googleapis.com/auth/drive'] 
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(
     json, scope)
+client = gs.authorize(credentials)
 
 
 sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1SlnFPqnbVkwEh3Gt56lNxIadE2tfUfQy-KsFn4Xx5l4/edit#gid=1350786165')
