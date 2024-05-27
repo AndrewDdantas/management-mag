@@ -44,10 +44,10 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
-update = (datetime.now() - timedelta(hours=3)).strftime('%d/%m/%Y')
+#update = (datetime.now() - timedelta(hours=3)).strftime('%d/%m/%Y')
 
 st.title('Gestão Bloqueios CDs')
-st.write(f'Update: '+update)
+update = st.empty()
 
 json = {
     "type": "service_account",
@@ -153,7 +153,7 @@ styled_pivot_table_empresa = pivot_table_empresa.style.applymap(color_negative_r
 col1.subheader('Evolução Cds')
 col1.dataframe(styled_pivot_table_empresa)
 
-
+update.write(f'Update: '+ recent_dates[-1])
 
 pivot_table_aging = pd.pivot_table(log,'VALOR','AGING','DATA','sum').fillna(0)
 recent_dates = sorted(pivot_table_aging.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)[:5]
