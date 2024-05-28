@@ -145,6 +145,8 @@ col3_emp.subheader(f"Sku's: {sku}")
 pivot_table_empresa = pd.pivot_table(log,'VALOR','CD_EMPRESA','DATA','sum').fillna(0)
 recent_dates = sorted(pivot_table_empresa.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=True)[:5]
 pivot_table_empresa = pivot_table_empresa[recent_dates]
+recent_dates = sorted(pivot_table_empresa.columns, key=lambda x: pd.to_datetime(x, dayfirst=True), reverse=False)
+pivot_table_empresa = pivot_table_empresa[recent_dates]
 if len(recent_dates) >= 2:
     pivot_table_empresa['Diferença'] = pivot_table_empresa[recent_dates[-1]] - pivot_table_empresa[recent_dates[-2]]
 pivot_table_empresa = pivot_table_empresa.sort_values(recent_dates[-1], ascending=False)
