@@ -70,7 +70,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_dict(
 client = gs.authorize(credentials)
 
 
-sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1SlnFPqnbVkwEh3Gt56lNxIadE2tfUfQy-KsFn4Xx5l4/edit#gid=1350786165')
+sheet = client.open_by_url(st.secrets['sheet'])
 
 db_worksheet = sheet.worksheet('DB')
 db_data = db_worksheet.get_all_values()
