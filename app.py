@@ -150,11 +150,6 @@ pivot_table_empresa = pivot_table_empresa[recent_dates]
 if len(recent_dates) >= 2:
     pivot_table_empresa['Diferença'] = pivot_table_empresa[recent_dates[-1]] - pivot_table_empresa[recent_dates[-2]]
 pivot_table_empresa = pivot_table_empresa.sort_values(recent_dates[-1], ascending=False)
-# Adiciona a linha de total
-total_row = pivot_table_empresa.sum(numeric_only=True)
-total_row.name = 'Total'
-pivot_table_empresa = pivot_table_empresa.append(total_row)
-
 pivot_table_empresa = pivot_table_empresa.applymap(fmt_num, tipo='NORMAL')
 styled_pivot_table_empresa = pivot_table_empresa.style.applymap(color_negative_red_positive_green, subset=['Diferença'])
 col1.subheader('Evolução Cds')
